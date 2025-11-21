@@ -1,0 +1,73 @@
+name: 'Auto-update Dependencies'
+
+on:
+  schedule:
+    - cron: '0 9 * * *' # Run daily at 9:00 AM UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-dependencies:
+    runs-on: ubuntu-latest
+    name: Check for new tool versions and update
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get latest tool versions
+        id: get_versions
+        run: |
+          # --- Get Checkov version ---
+          echo "Fetching latest Checkov release..."
+          LATEST_CHECKOV=$(curl -sL https://api.github.com/repos/bridgecrewio/checkov/releases/latest | jq -r '.tag_name')
+          CURRENT_CHECKOV=$(grep "ENV CHECKOV_VERSION" Dockerfile | cut -d '=' -f 2)
+          echo "checkov-latest=${LATEST_CHECKOV}" >> $GITHUB_OUTPUT
+          echo "checkov-current=${CURRENT_CHECKOV}" >> $GITHUB_OUTPUT
+          echo "Checkov: Current=${CURRENT_CHECKOV}, Latest=${LATEST_CHECKOV}"
+
+          echo "Fetching latest reviewdog release..."
+          LATEST_REVIEWDOG=$(curl -sL https://api.github.com/repos/reviewdog/reviewdog/releases/latest | jq -r '.tag_name')
+          CURRENT_REVIEWDOG=$(grep "ENV REVIEWDOG_VERSION" Dockerfile | cut -d '=' -f 2)
+          echo "reviewdog-latest=${LATEST_REVIEWDOG}" >> $GITHUB_OUTPUT
+          echo "reviewdog-current=${CURRENT_REVIEWDOG}" >> $GITHUB_OUTPUT
+          echo "reviewdog: Current=${CURRENT_REVIEWDOG}, Latest=${LATEST_REVIEWDOG}"
+
+      - name: Update Dockerfile and create release
+        if: steps.get_versions.outputs.checkov-latest != steps.get_versions.outputs.checkov-current || steps.get_versions.outputs.reviewdog-latest != steps.get_versions.outputs.reviewdog-current
+        run: |
+          MADE_CHANGES=false
+          CHANGELOG=""
+          
+          if [ "${{ steps.get_versions.outputs.checkov-latest }}" != "${{ steps.get_versions.outputs.checkov-current }}" ]; then
+            echo "✅ New Checkov version found: ${{ steps.get_versions.outputs.checkov-current }} -> ${{ steps.get_versions.outputs.checkov-latest }}"
+            sed -i "s/ENV CHECKOV_VERSION=${{ steps.get_versions.outputs.checkov-current }}/ENV CHECKOV_VERSION=${{ steps.get_versions.outputs.checkov-latest }}/" Dockerfile
+            MADE_CHANGES=true
+            CHANGELOG+="- checkov: ${{ steps.get_versions.outputs.checkov-current }} -> ${{ steps.get_versions.outputs.checkov-latest }}\n"
+          else
+            echo "ℹ️ Checkov is already up-to-date."
+          fi
+          if [ "${{ steps.get_versions.outputs.reviewdog-latest }}" != "${{ steps.get_versions.outputs.reviewdog-current }}" ]; then
+            echo "✅ New reviewdog version found: ${{ steps.get_versions.outputs.reviewdog-current }} -> ${{ steps.get_versions.outputs.reviewdog-latest }}"
+            sed -i "s/ENV REVIEWDOG_VERSION=${{ steps.get_versions.outputs.reviewdog-current }}/ENV REVIEWDOG_VERSION=${{ steps.get_versions.outputs.reviewdog-latest }}/" Dockerfile
+            MADE_CHANGES=true
+            CHANGELOG+="- reviewdog: ${{ steps.get_versions.outputs.reviewdog-current }} -> ${{ steps.get_versions.outputs.reviewdog-latest }}\n"
+          else
+            echo "ℹ️ reviewdog is already up-to-date."
+          fi
+          if [ "$MADE_CHANGES" = true ]; then
+            echo "🚀 Changes detected. Preparing for commit."
+            echo "made_changes=true" >> $GITHUB_OUTPUT
+          else
+           echo "👍 No dependency updates needed."
+          fi
+      - name: Commit and push changes
+        if: steps.prepare-changes.outputs.made_changes == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'feat: update dependencies\n\n${{ steps.prepare-changes.outputs.changelog }}'
+          file_pattern: 'Dockerfile'
