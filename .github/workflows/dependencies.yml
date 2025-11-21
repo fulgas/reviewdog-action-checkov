@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   update-dependencies:
@@ -37,9 +38,11 @@ jobs:
           echo "reviewdog-current=${CURRENT_REVIEWDOG}" >> $GITHUB_OUTPUT
           echo "reviewdog: Current=${CURRENT_REVIEWDOG}, Latest=${LATEST_REVIEWDOG}"
 
-      - name: Update Dockerfile and create release
+      - name: Prepare Changes
+        id: prepare-changes
         if: steps.get_versions.outputs.checkov-latest != steps.get_versions.outputs.checkov-current || steps.get_versions.outputs.reviewdog-latest != steps.get_versions.outputs.reviewdog-current
         run: |
+          # --- Prepare changes ---
           MADE_CHANGES=false
           CHANGELOG=""
           
@@ -60,14 +63,43 @@ jobs:
             echo "ℹ️ reviewdog is already up-to-date."
           fi
           if [ "$MADE_CHANGES" = true ]; then
-            echo "🚀 Changes detected. Preparing for commit."
+            echo "🚀 Changes detected. Preparing to create a PR."
             echo "made_changes=true" >> $GITHUB_OUTPUT
+            echo "changelog<<EOF" >> $GITHUB_OUTPUT
+            echo -e "${CHANGELOG}" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
           else
-           echo "👍 No dependency updates needed."
+            echo "made_changes=false" >> $GITHUB_OUTPUT
+            echo "👍 No dependency updates needed."
           fi
-      - name: Commit and push changes
+
+      - name: Create Pull Request
         if: steps.prepare-changes.outputs.made_changes == 'true'
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: peter-evans/create-pull-request@v7
         with:
-          commit_message: 'feat: update dependencies\n\n${{ steps.prepare-changes.outputs.changelog }}'
-          file_pattern: 'Dockerfile'
+          commit-message: |
+            feat: update dependencies
+            
+            ${{ steps.prepare-changes.outputs.changelog }}
+
+          title: 'feat: Automated Dependency Updates'
+          body: |
+            ## Automated Dependency Update
+            
+            This PR was automatically created because new versions of dependencies were detected.
+            
+            ### Changes:
+            ${{ steps.prepare-changes.outputs.changelog }}
+            
+            ---
+            
+            ✅ Once all checks pass, this PR can be merged automatically.
+          branch: 'feat/dependency-updates'
+          branch-suffix: timestamp
+          sign-commits: true
+          delete-branch: true
+          labels: |
+            dependencies
+            reviewdog
+            checkov
+            automated

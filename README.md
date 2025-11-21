@@ -27,7 +27,7 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Run Checkov with reviewdog
-        uses: fulgas/reviewdog-action-checkov@v1.0.0
+        uses: fulgas/reviewdog-action-checkov@v1.0.1
         with:
           github_token: ${{ secrets.github_token }}
 ```
@@ -45,7 +45,7 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Run Checkov with reviewdog
-        uses: fulgas/reviewdog-action-checkov@v1.0.0
+        uses: fulgas/reviewdog-action-checkov@v1.0.1
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
@@ -116,7 +116,7 @@ jobs:
 ### Scan only Terraform files
 
 ```yaml
-- uses: fulgas/reviewdog-action-checkov@v1.0.0
+- uses: fulgas/reviewdog-action-checkov@v1.0.1
   with:
     github_token: ${{ secrets.github_token }}
     framework: terraform
@@ -125,7 +125,7 @@ jobs:
 ### Skip specific checks
 
 ```yaml
-- uses: fulgas/reviewdog-action-checkov@v1.0.0
+- uses: fulgas/reviewdog-action-checkov@v1.0.1
   with:
     github_token: ${{ secrets.github_token }}
     skip_check: "CKV_AWS_1 CKV_AWS_18 CKV_AWS_19"
@@ -134,7 +134,7 @@ jobs:
 ### Scan specific directory
 
 ```yaml
-- uses: fulgas/reviewdog-action-checkov@v1.0.0
+- uses: fulgas/reviewdog-action-checkov@v1.0.1
   with:
     github_token: ${{ secrets.github_token }}
     working_directory: infrastructure/
@@ -144,7 +144,7 @@ jobs:
 ### Fail on warnings
 
 ```yaml
-- uses: fulgas/reviewdog-action-checkov@v1.0.0
+- uses: fulgas/reviewdog-action-checkov@v1.0.1
   with:
     github_token: ${{ secrets.github_token }}
     fail_level: warning
