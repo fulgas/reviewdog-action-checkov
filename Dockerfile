@@ -1,4 +1,4 @@
-FROM alpine:3.19 AS reviewdog-builder
+FROM alpine:3.22 AS reviewdog-builder
 
 ARG TARGETARCH
 ENV REVIEWDOG_VERSION=v0.21.0
