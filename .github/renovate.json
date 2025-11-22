@@ -1,0 +1,20 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base"],
+  "prConcurrentLimit": 3,
+  "schedule": ["before 6am on monday"],
+  "packageRules": [
+    {
+      "description": "Auto-merge patch updates for dev-dependencies",
+      "matchDepTypes": ["dev-dependencies"],
+      "matchUpdateTypes": ["patch"],
+      "automerge": true
+    },
+    {
+      "description": "Group GitHub Actions updates",
+      "matchDatasources": ["github-tags"],
+      "matchFileNames": [".github/workflows/*.yml", ".github/workflows/*.yaml"],
+      "groupName": "GitHub Actions"
+    }
+  ]
+}
