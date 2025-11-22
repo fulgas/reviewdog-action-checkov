@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Test ${{ matrix.framework }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        framework: [ terraform, cloudformation, kubernetes ]
+      fail-fast: false
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Run Checkov for ${{ matrix.framework }}
+        id: checkov
+        uses: ./
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          framework: ${{ matrix.framework }}
+          working_directory: "."
+          target_dir: "tests/${{ matrix.framework }}"
+          reporter: "local"
+          filter_mode: "nofilter"
+          fail_level: "none"
+
+      - name: Display results for ${{ matrix.framework }}
+        if: always()
+        run: |
+          echo "### Test Results for ${{ matrix.framework }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          CHECKOV_CODE="${{ steps.checkov.outputs.checkov-return-code }}"
+          REVIEWDOG_CODE="${{ steps.checkov.outputs.reviewdog-return-code }}"
+          
+          echo "**Step outputs:**" >> $GITHUB_STEP_SUMMARY
+          echo "- Checkov exit code: \`${CHECKOV_CODE}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Reviewdog exit code: \`${REVIEWDOG_CODE}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Console output
+          echo "Checkov return code: ${CHECKOV_CODE}"
+          echo "Reviewdog return code: ${REVIEWDOG_CODE}"
+          
+          # Validate expected results
+          if [ "${CHECKOV_CODE}" = "1" ] && [ "${REVIEWDOG_CODE}" = "0" ]; then
+            echo "✅ Expected results: Checkov found issues (1), Reviewdog handled gracefully (0)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Unexpected results!" >> $GITHUB_STEP_SUMMARY
+            echo "  - Expected Checkov: 1, Got: ${CHECKOV_CODE}" >> $GITHUB_STEP_SUMMARY
+            echo "  - Expected Reviewdog: 0, Got: ${REVIEWDOG_CODE}" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Fail if unexpected results
+        if: always()
+        run: |
+          CHECKOV_CODE="${{ steps.checkov.outputs.checkov-return-code }}"
+          REVIEWDOG_CODE="${{ steps.checkov.outputs.reviewdog-return-code }}"
+          
+          if [ "${CHECKOV_CODE}" != "1" ] || [ "${REVIEWDOG_CODE}" != "0" ]; then
+            echo "::error::Unexpected exit codes for ${{ matrix.framework }}"
+            echo "::error::Expected: Checkov=1, Reviewdog=0"
+            echo "::error::Got: Checkov=${CHECKOV_CODE}, Reviewdog=${REVIEWDOG_CODE}"
+            exit 1
+          else
+            echo "::notice::${{ matrix.framework }} passed with expected exit codes"
+          fi

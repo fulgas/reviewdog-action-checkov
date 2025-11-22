@@ -2,32 +2,6 @@
 set -Eeuo pipefail
 
 ###############################################################################
-# Environment defaults
-###############################################################################
-export GITHUB_WORKSPACE="${GITHUB_WORKSPACE:-/github/workspace}"
-export GITHUB_OUTPUT="${GITHUB_OUTPUT:-/tmp/github_output}"
-
-export INPUT_GITHUB_TOKEN="${INPUT_GITHUB_TOKEN:-}"
-export INPUT_WORKING_DIRECTORY="${INPUT_WORKING_DIRECTORY:-.}"
-export INPUT_TARGET_DIR="${INPUT_TARGET_DIR:-.}"
-export INPUT_REPORTER="${INPUT_REPORTER:-github-pr-check}"
-export INPUT_LEVEL="${INPUT_LEVEL:-error}"
-export INPUT_FILTER_MODE="${INPUT_FILTER_MODE:-added}"
-export INPUT_FAIL_LEVEL="${INPUT_FAIL_LEVEL:-error}"
-export INPUT_CHECKOV_VERSION="${INPUT_CHECKOV_VERSION:-latest}"
-export INPUT_SKIP_CHECK="${INPUT_SKIP_CHECK:-}"
-export INPUT_FRAMEWORK="${INPUT_FRAMEWORK:-}"
-export INPUT_FLAGS="${INPUT_FLAGS:-}"
-
-###############################################################################
-# Ensure GITHUB_OUTPUT exists
-###############################################################################
-if [ ! -f "${GITHUB_OUTPUT}" ]; then
-  mkdir -p "$(dirname "${GITHUB_OUTPUT}")"
-  touch "${GITHUB_OUTPUT}"
-fi
-
-###############################################################################
 # Move into working directory
 ###############################################################################
 cd "${GITHUB_WORKSPACE}/${INPUT_WORKING_DIRECTORY}" || exit 1
@@ -70,7 +44,7 @@ echo '::group::🔍 Running Checkov (quiet mode)…'
 TARGET_DIR="${INPUT_TARGET_DIR:-.}"
 RESULT_SARIF=$(mktemp -d)
 SARIF_FILE="$RESULT_SARIF/results_sarif.sarif"
-echo "Directory: ${TARGET_DIR}"
+echo "Target Directory: ${TARGET_DIR}"
 echo "Checkov args: ${CHECKOV_ARGS[*]}"
 
 set +Eeuo pipefail
