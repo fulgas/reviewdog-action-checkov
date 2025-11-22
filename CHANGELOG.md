@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/fulgas/reviewdog-action-checkov/compare/v1.0.3...v1.0.4) (2025-11-22)
+
+
+### Bug Fixes
+
+* add tests ([017114b](https://github.com/fulgas/reviewdog-action-checkov/commit/017114bcc95e13c5e6f27dbf96d5473b822c4a79))
+
 ## [1.0.3](https://github.com/fulgas/reviewdog-action-checkov/compare/v1.0.2...v1.0.3) (2025-11-22)
 
 
