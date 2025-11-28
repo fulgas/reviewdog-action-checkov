@@ -165,15 +165,29 @@ jobs:
 
 ## Development
 
+### Multi-Platform Support
+
+This action supports both **AMD64** and **ARM64** architectures:
+- ✅ Works on Apple Silicon (M1/M2/M3 Macs)
+- ✅ Works on AWS Graviton runners
+- ✅ Works on standard x86_64 runners
+
+The CI workflow tests both architectures to ensure compatibility.
+
 ### Building Locally
 
 ```bash
+# Build for your native architecture
 docker build -t reviewdog-action-checkov .
+
+# Or build for a specific platform
+docker build --platform linux/amd64 -t reviewdog-action-checkov:amd64 .
+docker build --platform linux/arm64 -t reviewdog-action-checkov:arm64 .
 ```
 
 ### Testing
 
-The CI workflow automatically builds the Dockerfile and tests it against all supported frameworks (Terraform, CloudFormation, Kubernetes). This ensures that changes to the Dockerfile are properly tested before being published to GHCR.
+The CI workflow automatically builds the Dockerfile and tests it against all supported frameworks (Terraform, CloudFormation, Kubernetes) on multiple platforms and Ubuntu versions. This ensures that changes to the Dockerfile are properly tested before being published to GHCR.
 
 To test locally:
 
