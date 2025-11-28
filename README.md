@@ -31,7 +31,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Run Checkov with reviewdog
-        uses: fulgas/reviewdog-action-checkov@v1.2.0
+        uses: fulgas/reviewdog-action-checkov@v2.0.0
         with:
           github_token: ${{ secrets.github_token }}
 ```
@@ -49,7 +49,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Run Checkov with reviewdog
-        uses: fulgas/reviewdog-action-checkov@v1.2.0
+        uses: fulgas/reviewdog-action-checkov@v2.0.0
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
@@ -74,7 +74,7 @@ jobs:
   checkov:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/fulgas/reviewdog-action-checkov:1.2.0
+      image: ghcr.io/fulgas/reviewdog-action-checkov:2.0.0
     steps:
       - uses: actions/checkout@v4
 
@@ -129,7 +129,7 @@ jobs:
 ### Scan only Terraform files
 
 ```yaml
-- uses: fulgas/reviewdog-action-checkov@v1.2.0
+- uses: fulgas/reviewdog-action-checkov@v2.0.0
   with:
     github_token: ${{ secrets.github_token }}
     framework: terraform
@@ -138,7 +138,7 @@ jobs:
 ### Skip specific checks
 
 ```yaml
-- uses: fulgas/reviewdog-action-checkov@v1.2.0
+- uses: fulgas/reviewdog-action-checkov@v2.0.0
   with:
     github_token: ${{ secrets.github_token }}
     skip_check: "CKV_AWS_1 CKV_AWS_18 CKV_AWS_19"
@@ -147,7 +147,7 @@ jobs:
 ### Scan specific directory
 
 ```yaml
-- uses: fulgas/reviewdog-action-checkov@v1.2.0
+- uses: fulgas/reviewdog-action-checkov@v2.0.0
   with:
     github_token: ${{ secrets.github_token }}
     working_directory: infrastructure/
@@ -157,7 +157,7 @@ jobs:
 ### Fail on warnings
 
 ```yaml
-- uses: fulgas/reviewdog-action-checkov@v1.2.0
+- uses: fulgas/reviewdog-action-checkov@v2.0.0
   with:
     github_token: ${{ secrets.github_token }}
     fail_level: warning
@@ -208,7 +208,7 @@ docker run --rm \
 
 ### How It Works
 
-1. **Action Usage**: The action uses a pre-built Docker image from GHCR (`ghcr.io/fulgas/reviewdog-action-checkov:1.2.0`) for fast execution
+1. **Action Usage**: The action uses a pre-built Docker image from GHCR (`ghcr.io/fulgas/reviewdog-action-checkov:2.0.0
 2. **CI Testing**: The CI workflow builds the Dockerfile from source and runs tests against it to validate changes
 3. **Publishing**: When a release is created, the Docker image is built and published to GHCR with the release tag
 
