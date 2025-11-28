@@ -13,7 +13,7 @@ A GitHub Action that runs [Checkov](https://www.checkov.io/) for Infrastructure 
 - 🐶 Inline PR comments with reviewdog
 - 🎯 Configurable severity levels and filters
 - 🚀 Easy to integrate into existing workflows
-- 🐳 Available as Docker image on GHCR
+- 🐳 Pre-built Docker image on GHCR for faster execution
 - 🤖 Automated dependency updates via Renovate
 
 ## Usage
@@ -31,7 +31,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Run Checkov with reviewdog
-        uses: fulgas/reviewdog-action-checkov@v1.0.4
+        uses: fulgas/reviewdog-action-checkov@v1.2.0
         with:
           github_token: ${{ secrets.github_token }}
 ```
@@ -49,7 +49,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Run Checkov with reviewdog
-        uses: fulgas/reviewdog-action-checkov@v1.0.4
+        uses: fulgas/reviewdog-action-checkov@v1.2.0
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
@@ -57,13 +57,14 @@ jobs:
           filter_mode: nofilter
           fail_level: error
           working_directory: terraform/
-          checkov_version: "2.3.4"
           skip_check: "CKV_AWS_1 CKV_AWS_2"
           framework: terraform,kubernetes
           flags: "--soft-fail"
 ```
 
 ### Using Docker Image from GHCR
+
+You can also run the action directly using the Docker image:
 
 ```yaml
 name: Checkov Review
@@ -73,15 +74,23 @@ jobs:
   checkov:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/fulgas/reviewdog-action-checkov:1.0.4
+      image: ghcr.io/fulgas/reviewdog-action-checkov:1.2.0
     steps:
       - uses: actions/checkout@v4
 
       - name: Run Checkov
         env:
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.github_token }}
+          INPUT_GITHUB_TOKEN: ${{ secrets.github_token }}
           INPUT_REPORTER: github-pr-check
           INPUT_LEVEL: error
+          INPUT_FILTER_MODE: added
+          INPUT_FAIL_LEVEL: error
+          INPUT_WORKING_DIRECTORY: "."
+          INPUT_TARGET_DIR: "."
+          INPUT_SKIP_CHECK: ""
+          INPUT_FRAMEWORK: ""
+          INPUT_FLAGS: ""
         run: /entrypoint.sh
 ```
 
@@ -120,7 +129,7 @@ jobs:
 ### Scan only Terraform files
 
 ```yaml
-- uses: fulgas/reviewdog-action-checkov@v1.0.4
+- uses: fulgas/reviewdog-action-checkov@v1.2.0
   with:
     github_token: ${{ secrets.github_token }}
     framework: terraform
@@ -129,7 +138,7 @@ jobs:
 ### Skip specific checks
 
 ```yaml
-- uses: fulgas/reviewdog-action-checkov@v1.0.4
+- uses: fulgas/reviewdog-action-checkov@v1.2.0
   with:
     github_token: ${{ secrets.github_token }}
     skip_check: "CKV_AWS_1 CKV_AWS_18 CKV_AWS_19"
@@ -138,7 +147,7 @@ jobs:
 ### Scan specific directory
 
 ```yaml
-- uses: fulgas/reviewdog-action-checkov@v1.0.4
+- uses: fulgas/reviewdog-action-checkov@v1.2.0
   with:
     github_token: ${{ secrets.github_token }}
     working_directory: infrastructure/
@@ -148,7 +157,7 @@ jobs:
 ### Fail on warnings
 
 ```yaml
-- uses: fulgas/reviewdog-action-checkov@v1.0.4
+- uses: fulgas/reviewdog-action-checkov@v1.2.0
   with:
     github_token: ${{ secrets.github_token }}
     fail_level: warning
@@ -164,17 +173,43 @@ docker build -t reviewdog-action-checkov .
 
 ### Testing
 
+The CI workflow automatically builds the Dockerfile and tests it against all supported frameworks (Terraform, CloudFormation, Kubernetes). This ensures that changes to the Dockerfile are properly tested before being published to GHCR.
+
+To test locally:
+
 ```bash
+# Build the image
+docker build -t reviewdog-action-checkov:test .
+
+# Run tests
 docker run --rm \
   -v $(pwd):/github/workspace \
-  -e GITHUB_TOKEN=your_token \
-  -e INPUT_REPORTER=github-pr-check \
-  reviewdog-action-checkov
+  -e GITHUB_WORKSPACE=/github/workspace \
+  -e INPUT_GITHUB_TOKEN=your_token \
+  -e INPUT_REPORTER=local \
+  -e INPUT_FRAMEWORK=terraform \
+  -e INPUT_TARGET_DIR=tests/terraform \
+  reviewdog-action-checkov:test
 ```
+
+### How It Works
+
+1. **Action Usage**: The action uses a pre-built Docker image from GHCR (`ghcr.io/fulgas/reviewdog-action-checkov:1.2.0`) for fast execution
+2. **CI Testing**: The CI workflow builds the Dockerfile from source and runs tests against it to validate changes
+3. **Publishing**: When a release is created, the Docker image is built and published to GHCR with the release tag
+
+This approach provides the best of both worlds:
+- Users get fast action execution with pre-built images
+- Developers can test Dockerfile changes before they're published
 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+When contributing, please:
+1. Follow the [semantic commit convention](CONTRIBUTING.md#commit-messages)
+2. Test your changes locally
+3. Update documentation as needed
 
 ## License
 

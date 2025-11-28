@@ -63,18 +63,18 @@ outputs:
 
 runs:
   using: 'docker'
-  image: 'Dockerfile'
-  args:
-    - ${{ inputs.github_token }}
-    - ${{ inputs.level }}
-    - ${{ inputs.reporter }}
-    - ${{ inputs.filter_mode }}
-    - ${{ inputs.fail_level }}
-    - ${{ inputs.working_directory }}
-    - ${{ inputs.target_dir }}
-    - ${{ inputs.skip_check }}
-    - ${{ inputs.framework }}
-    - ${{ inputs.flags }}
+  image: 'docker://ghcr.io/fulgas/reviewdog-action-checkov:1.2.0'
+  env:
+    INPUT_GITHUB_TOKEN: ${{ inputs.github_token }}
+    INPUT_LEVEL: ${{ inputs.level }}
+    INPUT_REPORTER: ${{ inputs.reporter }}
+    INPUT_FILTER_MODE: ${{ inputs.filter_mode }}
+    INPUT_FAIL_LEVEL: ${{ inputs.fail_level }}
+    INPUT_WORKING_DIRECTORY: ${{ inputs.working_directory }}
+    INPUT_TARGET_DIR: ${{ inputs.target_dir }}
+    INPUT_SKIP_CHECK: ${{ inputs.skip_check }}
+    INPUT_FRAMEWORK: ${{ inputs.framework }}
+    INPUT_FLAGS: ${{ inputs.flags }}
 
 branding:
   icon: 'shield'

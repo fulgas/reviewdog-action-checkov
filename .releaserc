@@ -13,19 +13,24 @@
           {
             "files": ["README.md"],
             "from": "fulgas\/reviewdog-action-checkov@v.*",
-            "to": "fulgas\/reviewdog-action-checkov@v${nextRelease.version}"
+            "to": "fulgas\/reviewdog-action-checkov@v${nextRelease.version}",
           },
           {
             "files": ["README.md"],
             "from": "ghcr.io\/fulgas\/reviewdog-action-checkov:.*",
-            "to": "ghcr.io\/fulgas\/reviewdog-action-checkov:${nextRelease.version}"
+            "to": "ghcr.io\/fulgas\/reviewdog-action-checkov:${nextRelease.version}",
+          },
+          {
+            "files": ["action.yml"],
+            "from": "image: 'docker:\/\/ghcr.io\/fulgas\/reviewdog-action-checkov:.*'",
+            "to": "image: 'docker://ghcr.io/fulgas/reviewdog-action-checkov:${nextRelease.version}'",
           }
         ]
       }
     ],
     ["@semantic-release/git", {
-      "assets": ["CHANGELOG.md", "README.md"],
-      "message": "chore(release): ${nextRelease.version} [skip ci]"
+      "assets": ["CHANGELOG.md", "README.md", "action.yml"],
+      "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
     }],
     "@semantic-release/github"
   ]
