@@ -17,12 +17,12 @@
           },
           {
             "files": ["README.md"],
-            "from": "ghcr.io\/fulgas\/reviewdog-action-checkov:.*",
+            "from": "ghcr.io\/fulgas\/reviewdog-action-checkov:[0-9]+\\.[0-9]+\\.[0-9]+",
             "to": "ghcr.io\/fulgas\/reviewdog-action-checkov:${nextRelease.version}",
           },
           {
             "files": ["action.yml"],
-            "from": "image: 'docker:\/\/ghcr.io\/fulgas\/reviewdog-action-checkov:.*'",
+            "from": "image: 'docker:\/\/ghcr.io\/fulgas\/reviewdog-action-checkov:[0-9]+\\.[0-9]+\\.[0-9]+'",
             "to": "image: 'docker://ghcr.io/fulgas/reviewdog-action-checkov:${nextRelease.version}'",
           }
         ]

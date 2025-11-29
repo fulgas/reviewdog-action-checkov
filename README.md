@@ -5,7 +5,13 @@
 [![Checkov](https://img.shields.io/github/v/release/bridgecrewio/checkov?label=Checkov&color=6B46C1&logo=python&logoColor=white)](https://www.checkov.io/)
 [![Reviewdog](https://img.shields.io/github/v/release/reviewdog/reviewdog?label=Reviewdog&color=F97316&logo=go&logoColor=white)](https://github.com/reviewdog/reviewdog)
 
+## Description
+
+<!-- AUTO-DOC-DESCRIPTION:START - Do not remove or modify this section -->
+
 A GitHub Action that runs [Checkov](https://www.checkov.io/) for Infrastructure as Code (IaC) security scanning and reports results to pull requests using [reviewdog](https://github.com/reviewdog/reviewdog).
+
+<!-- AUTO-DOC-DESCRIPTION:END -->
 
 ## Features
 
@@ -96,25 +102,33 @@ jobs:
 
 ## Inputs
 
-| Name                | Description                                                                | Default           | Required |
-|---------------------|----------------------------------------------------------------------------|-------------------|----------|
-| `github_token`      | GitHub token for API access                                                | -                 | ✅        |
-| `level`             | Report level for reviewdog (`info`, `warning`, `error`)                    | `error`           | ❌        |
-| `reporter`          | Reviewdog reporter (`github-pr-check`, `github-pr-review`, `github-check`) | `github-pr-check` | ❌        |
-| `filter_mode`       | Filtering mode (`added`, `diff_context`, `file`, `nofilter`)               | `added`           | ❌        |
-| `fail_level`        | Exit code level (`none`, `info`, `warning`, `error`)                       | `error`           | ❌        |
-| `working_directory` | Directory to run action from                                               | `.`               | ❌        |
-| `target_dir`        | Directory for Checkov to scan                                              | `.`               | ❌        |
-| `skip_check`        | Space-separated checks to skip (e.g., `CKV_AWS_1 CKV_AWS_2`)               | `""`              | ❌        |
-| `framework`         | Comma-separated frameworks to scan                                         | `""`              | ❌        |
-| `flags`             | Additional Checkov flags                                                   | `""`              | ❌        |
+<!-- AUTO-DOC-INPUT:START - Do not remove or modify this section -->
+
+|       INPUT       |  TYPE  | REQUIRED |       DEFAULT       |                                     DESCRIPTION                                      |
+|-------------------|--------|----------|---------------------|--------------------------------------------------------------------------------------|
+|    fail_level     | string |  false   |      `"error"`      | If set to none, always use <br>exit code 0. Otherwise fail if <br>findings >= level  |
+|    filter_mode    | string |  false   |      `"added"`      |           Filtering mode for reviewdog [added,diff_context,file,nofilter]            |
+|       flags       | string |  false   |                     |                         Additional flags to pass to Checkov                          |
+|     framework     | string |  false   |                     |     Comma-separated list of frameworks to scan <br>(e.g., terraform,kubernetes)      |
+|   github_token    | string |   true   |                     |                                     GITHUB_TOKEN                                     |
+|       level       | string |  false   |      `"error"`      |                   Report level for reviewdog [info,warning,error]                    |
+|     reporter      | string |  false   | `"github-pr-check"` |    Reporter of reviewdog command [github-pr-check,github-pr-review,github-check]     |
+|    skip_check     | string |  false   |                     |   Space-separated list of Checkov checks to <br>skip (e.g., CKV_AWS_1 CKV_AWS_2)     |
+|    target_dir     | string |  false   |        `"."`        |                         Target directory for Checkov to scan                         |
+| working_directory | string |  false   |        `"."`        |                           Directory to run the action from                           |
+
+<!-- AUTO-DOC-INPUT:END -->
 
 ## Outputs
 
-| Name                    | Description                 |
-|-------------------------|-----------------------------|
-| `checkov-return-code`   | Checkov command exit code   |
-| `reviewdog-return-code` | Reviewdog command exit code |
+<!-- AUTO-DOC-OUTPUT:START - Do not remove or modify this section -->
+
+|        OUTPUT         |  TYPE  |          DESCRIPTION          |
+|-----------------------|--------|-------------------------------|
+|  checkov-return-code  | string |  Checkov command return code  |
+| reviewdog-return-code | string | reviewdog command return code |
+
+<!-- AUTO-DOC-OUTPUT:END -->
 
 
 ## Filter Modes
@@ -208,7 +222,7 @@ docker run --rm \
 
 ### How It Works
 
-1. **Action Usage**: The action uses a pre-built Docker image from GHCR (`ghcr.io/fulgas/reviewdog-action-checkov:2.0.0
+1. **Action Usage**: The action uses a pre-built Docker image from GHCR (`ghcr.io/fulgas/reviewdog-action-checkov:2.0.0`)
 2. **CI Testing**: The CI workflow builds the Dockerfile from source and runs tests against it to validate changes
 3. **Publishing**: When a release is created, the Docker image is built and published to GHCR with the release tag
 
