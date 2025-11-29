@@ -1,5 +1,5 @@
 name: 'Run Checkov with reviewdog'
-description: 'Run Checkov for IaC security scanning and report results using reviewdog'
+description: 'A GitHub Action that runs [Checkov](https://www.checkov.io/) for Infrastructure as Code (IaC) security scanning and reports results to pull requests using [reviewdog](https://github.com/reviewdog/reviewdog).'
 author: 'Nelson Silva <2473927+fulgas@users.noreply.github.com>'
 
 inputs:
