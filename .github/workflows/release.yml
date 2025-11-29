@@ -36,8 +36,6 @@ jobs:
 
       - name: Auto-generate documentation
         uses: tj-actions/auto-doc@v3.6.0
-        with:
-          output_file: README.md
 
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v4
