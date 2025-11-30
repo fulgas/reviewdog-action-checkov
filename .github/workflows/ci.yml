@@ -99,8 +99,8 @@ jobs:
           INPUT_FRAMEWORK: ${{ matrix.framework }}
           INPUT_WORKING_DIRECTORY: "."
           INPUT_TARGET_DIR: "tests/${{ matrix.framework }}"
-          INPUT_REPORTER: "local"
-          INPUT_FILTER_MODE: "nofilter"
+          INPUT_REPORTER: "github-pr-check"
+          INPUT_FILTER_MODE: "file"
           INPUT_FAIL_LEVEL: "none"
           INPUT_LEVEL: "error"
           INPUT_SKIP_CHECK: ""
