@@ -5,6 +5,7 @@ author: 'Nelson Silva <2473927+fulgas@users.noreply.github.com>'
 inputs:
   github_token:
     description: 'GITHUB_TOKEN'
+    default: '${{ github.token }}'
     required: true
 
   level:

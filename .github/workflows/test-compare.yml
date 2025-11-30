@@ -1,0 +1,45 @@
+name: Compare Reporters
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write  # For github-pr-review
+  checks: write         # For github-pr-check
+
+jobs:
+  # Test 1: github-pr-review (inline comments)
+  test-pr-review:
+    name: Test PR Review Reporter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Checkov with PR Review
+        uses: fulgas/reviewdog-action-checkov@v2.0.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          level: warning
+          filter_mode: diff_context
+          fail_level: none
+          framework: terraform
+
+  # Test 2: github-pr-check (annotations)
+  test-pr-check:
+    name: Test PR Check Reporter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Checkov with PR Check
+        uses: fulgas/reviewdog-action-checkov@v2.0.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-check
+          level: warning
+          filter_mode: diff_context
+          fail_level: none
+          framework: terraform
