@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Security Gate
-        uses: fulgas/reviewdog-action-checkov@v2.0.1
+        uses: fulgas/reviewdog-action-checkov@v2.1.0
         with:
           reporter: github-pr-check  # Creates check annotations
           level: error               # Only show errors

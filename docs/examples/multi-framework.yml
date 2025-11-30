@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Scan All IaC Frameworks
-        uses: fulgas/reviewdog-action-checkov@v2.0.1
+        uses: fulgas/reviewdog-action-checkov@v2.1.0
         with:
           reporter: github-pr-review
           framework: terraform,kubernetes,cloudformation  # Scan multiple frameworks

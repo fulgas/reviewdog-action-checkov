@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Security Review
-        uses: fulgas/reviewdog-action-checkov@v2.0.1
+        uses: fulgas/reviewdog-action-checkov@v2.1.0
         with:
           reporter: github-pr-review      # Creates inline PR comments
           level: warning                  # Show warnings and errors
