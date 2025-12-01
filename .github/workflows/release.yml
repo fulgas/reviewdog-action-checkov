@@ -35,7 +35,7 @@ jobs:
           git config --global user.email "semautobot@users.noreply.github.com"
 
       - name: Auto-generate documentation
-        uses: tj-actions/auto-doc@v3.6.0
+        uses: tj-actions/auto-doc@b10ceedffd794ec29a8fa8700529f40c1b64a951 # v3.6.0
 
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v4
