@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Scan Terraform Files
-        uses: fulgas/reviewdog-action-checkov@v2.2.0
+        uses: fulgas/reviewdog-action-checkov@v2.3.0
         with:
           reporter: github-pr-review
           framework: terraform           # Only scan Terraform
