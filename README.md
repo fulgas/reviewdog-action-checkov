@@ -43,7 +43,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run Checkov with reviewdog
-        uses: fulgas/reviewdog-action-checkov@v2.3.0
+        uses: fulgas/reviewdog-action-checkov@v2.4.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -67,7 +67,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run Checkov with reviewdog
-        uses: fulgas/reviewdog-action-checkov@v2.3.0
+        uses: fulgas/reviewdog-action-checkov@v2.4.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
@@ -97,7 +97,7 @@ jobs:
   checkov:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/fulgas/reviewdog-action-checkov:2.3.0
+      image: ghcr.io/fulgas/reviewdog-action-checkov:2.4.0
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -198,7 +198,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run Checkov
-        uses: fulgas/reviewdog-action-checkov@v2.3.0
+        uses: fulgas/reviewdog-action-checkov@v2.4.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
@@ -222,7 +222,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run Checkov
-        uses: fulgas/reviewdog-action-checkov@v2.3.0
+        uses: fulgas/reviewdog-action-checkov@v2.4.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-check
@@ -249,7 +249,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run Checkov
-        uses: fulgas/reviewdog-action-checkov@v2.3.0
+        uses: fulgas/reviewdog-action-checkov@v2.4.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-check
@@ -418,7 +418,7 @@ on:
 jobs:
   scan:
     steps:
-      - uses: fulgas/reviewdog-action-checkov@v2.3.0
+      - uses: fulgas/reviewdog-action-checkov@v2.4.0
         with:
           reporter: github-pr-review  # Won't work on schedule
 
@@ -429,7 +429,7 @@ jobs:
 **Mistake 2: Blocking PRs unintentionally**
 ```yaml
 # ❌ Wrong - fail_level defaults to 'error'
-- uses: fulgas/reviewdog-action-checkov@v2.3.0
+- uses: fulgas/reviewdog-action-checkov@v2.4.0
   with:
     github_token: ${{ secrets.GITHUB_TOKEN }}
     # No fail_level set - will block on errors!
@@ -441,7 +441,7 @@ jobs:
 **Mistake 3: Scanning wrong directory**
 ```yaml
 # ❌ Wrong - defaults to current directory
-- uses: fulgas/reviewdog-action-checkov@v2.3.0
+- uses: fulgas/reviewdog-action-checkov@v2.4.0
   with:
     # No target_dir - scans entire repo
 
@@ -456,7 +456,7 @@ jobs:
 **Solution:** Use the built-in `GITHUB_TOKEN`
 
 ```yaml
-- uses: fulgas/reviewdog-action-checkov@v2.3.0
+- uses: fulgas/reviewdog-action-checkov@v2.4.0
   with:
     github_token: ${{ secrets.GITHUB_TOKEN }}  # Built-in token
 ```
@@ -519,7 +519,7 @@ docker run --rm \
 
 ### How It Works
 
-1. **Action Usage**: The action uses a pre-built Docker image from GHCR (`ghcr.io/fulgas/reviewdog-action-checkov:2.3.0`)
+1. **Action Usage**: The action uses a pre-built Docker image from GHCR (`ghcr.io/fulgas/reviewdog-action-checkov:2.4.0`)
 2. **CI Testing**: The CI workflow builds the Dockerfile from source and runs tests against it to validate changes
 3. **Publishing**: When a release is created, the Docker image is built and published to GHCR with the release tag
 
