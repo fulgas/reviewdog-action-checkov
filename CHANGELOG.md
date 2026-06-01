@@ -1,3 +1,10 @@
+# [2.15.0](https://github.com/fulgas/reviewdog-action-checkov/compare/v2.14.0...v2.15.0) (2026-06-01)
+
+
+### Features
+
+* **deps:** update dependency bridgecrewio/checkov to v3.2.530 ([b92097b](https://github.com/fulgas/reviewdog-action-checkov/commit/b92097bc52b1fe193148fe478ccc26b94d2c51c7))
+
 # [2.14.0](https://github.com/fulgas/reviewdog-action-checkov/compare/v2.13.0...v2.14.0) (2026-05-19)
 
 
