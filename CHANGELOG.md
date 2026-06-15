@@ -1,3 +1,10 @@
+# [2.17.0](https://github.com/fulgas/reviewdog-action-checkov/compare/v2.16.0...v2.17.0) (2026-06-15)
+
+
+### Features
+
+* **deps:** update security-tools to v3.3.1 ([a7f27ef](https://github.com/fulgas/reviewdog-action-checkov/commit/a7f27ef052e65641a76b702979990145f4f05096))
+
 # [2.16.0](https://github.com/fulgas/reviewdog-action-checkov/compare/v2.15.0...v2.16.0) (2026-06-08)
 
 
