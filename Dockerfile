@@ -1,7 +1,7 @@
 FROM alpine:3.24@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b AS reviewdog-builder
 
 ARG TARGETARCH
-ENV REVIEWDOG_VERSION=v0.21.0
+ENV REVIEWDOG_VERSION=v0.21.2
 
 RUN apk add --no-cache curl && \
     case "${TARGETARCH}" in \
@@ -16,7 +16,7 @@ RUN apk add --no-cache curl && \
 
 FROM python:3.14-slim@sha256:f85c5697265c178cc6887276c55fe16cf3d14ca35c3df6a5eab3b360534a55d2 AS python-builder
 
-ENV CHECKOV_VERSION=3.3.13
+ENV CHECKOV_VERSION=3.3.26
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
