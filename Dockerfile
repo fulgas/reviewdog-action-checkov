@@ -16,7 +16,7 @@ RUN apk add --no-cache curl && \
 
 FROM python:3.14-slim@sha256:f85c5697265c178cc6887276c55fe16cf3d14ca35c3df6a5eab3b360534a55d2 AS python-builder
 
-ENV CHECKOV_VERSION=3.3.26
+ENV CHECKOV_VERSION=3.3.29
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
