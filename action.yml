@@ -69,7 +69,7 @@ outputs:
 
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/fulgas/reviewdog-action-checkov:2.22.0'
+  image: 'docker://ghcr.io/fulgas/reviewdog-action-checkov:2.22.0@sha256:c5c7214ab68968cc1245c51b551f85d5cf315b7e165bbf56fd8d9bdfb7fb601d'
   env:
     REVIEWDOG_GITHUB_API_TOKEN: ${{ inputs.github_token }}
     INPUT_TOOL_NAME: ${{ inputs.tool_name }}
