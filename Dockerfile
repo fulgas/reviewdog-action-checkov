@@ -14,7 +14,7 @@ RUN apk add --no-cache curl && \
     chmod +x /usr/local/bin/reviewdog
 
 
-FROM python:3.14-slim@sha256:af8a5aa14780025dbfbcfbc81bd8a91ebd87711dd5b0f48ed71090949dd7cb1d AS python-builder
+FROM python:3.14-slim@sha256:9aaa474097d094040649f2162a627c0049b408f52138d980916788d80f04802f AS python-builder
 
 ENV CHECKOV_VERSION=3.3.30
 
@@ -31,7 +31,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 
 RUN pip install --no-cache-dir checkov==${CHECKOV_VERSION};
 
-FROM python:3.14-slim@sha256:af8a5aa14780025dbfbcfbc81bd8a91ebd87711dd5b0f48ed71090949dd7cb1d
+FROM python:3.14-slim@sha256:9aaa474097d094040649f2162a627c0049b408f52138d980916788d80f04802f
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
